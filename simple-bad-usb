@@ -1,0 +1,79 @@
+# developed by https://t.me/hevorix
+import time
+import usb_hid
+from adafruit_hid.keyboard import Keyboard
+from adafruit_hid.keycode import Keycode
+
+keyboard = Keyboard(usb_hid.devices)
+
+keyboard_map = {
+    'a': Keycode.A, 'b': Keycode.B, 'c': Keycode.C, 'd': Keycode.D,
+    'e': Keycode.E, 'f': Keycode.F, 'g': Keycode.G, 'h': Keycode.H,
+    'i': Keycode.I, 'j': Keycode.J, 'k': Keycode.K, 'l': Keycode.L,
+    'm': Keycode.M, 'n': Keycode.N, 'o': Keycode.O, 'p': Keycode.P,
+    'q': Keycode.Q, 'r': Keycode.R, 's': Keycode.S, 't': Keycode.T,
+    'u': Keycode.U, 'v': Keycode.V, 'w': Keycode.W, 'x': Keycode.X,
+    'y': Keycode.Y, 'z': Keycode.Z,
+    '1': Keycode.ONE, '2': Keycode.TWO, '3': Keycode.THREE, '4': Keycode.FOUR,
+    '5': Keycode.FIVE, '6': Keycode.SIX, '7': Keycode.SEVEN, '8': Keycode.EIGHT,
+    '9': Keycode.NINE, '0': Keycode.ZERO,
+    '!': Keycode.ONE, '@': Keycode.TWO, '#': Keycode.THREE, '$': Keycode.FOUR,
+    '%': Keycode.FIVE, '^': Keycode.SIX, '&': Keycode.SEVEN, '*': Keycode.EIGHT,
+    '(': Keycode.NINE, ')': Keycode.ZERO,
+    '-': Keycode.MINUS, '=': Keycode.EQUALS, '\\': Keycode.BACKSLASH,
+    '[': Keycode.LEFT_BRACKET, ']': Keycode.RIGHT_BRACKET,
+    ';': Keycode.SEMICOLON, "'": Keycode.QUOTE, ',': Keycode.COMMA,
+    '.': Keycode.PERIOD, '/': Keycode.FORWARD_SLASH,
+    ' ': Keycode.SPACE
+}
+
+def type_uppercase(char):
+    if char.lower() in keyboard_map:
+        keyboard.press(Keycode.SHIFT, keyboard_map[char.lower()])
+        keyboard.release_all()
+
+def type_colon():
+    keyboard.press(Keycode.SHIFT, Keycode.SEMICOLON)
+    keyboard.release_all()
+
+def type_string(string):
+    for char in string:
+        if char in keyboard_map:
+            keyboard.press(keyboard_map[char])
+            keyboard.release_all()
+        elif char == ':':
+            type_colon()
+        elif char.isupper():
+            type_uppercase(char)
+        time.sleep(0.01)  
+def open_cmd():
+    keyboard.press(Keycode.GUI, Keycode.R)
+    keyboard.release_all()
+    time.sleep(1)
+    type_string("cmd")
+    time.sleep(1)
+    keyboard.press(Keycode.ENTER)
+    keyboard.release_all()
+    time.sleep(1)
+
+def type_command(command):
+    type_string(command)
+    time.sleep(1)
+    keyboard.press(Keycode.ENTER)
+    keyboard.release_all()
+    time.sleep(1)
+
+def main():
+    open_cmd()
+    commands = [
+        #here your commands 
+    ]
+    
+    for command in commands:
+        type_command(command)
+
+    sys.exit()
+
+if __name__ == "__main__":
+    import sys
+    main()
